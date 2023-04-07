@@ -3,13 +3,17 @@
 // Don't apply padding or margin on image
 
 (function () {
+
   const imageWrapper = document.querySelector('#image-wrapper')
+  const { left, top, width, height } = imageWrapper.getBoundingClientRect()
+
+  let currentPointer = null
 
   function calculatePointerPosition (event) {
 
     const pointerWidth = 10
 
-    const { left, top, width, height } = imageWrapper.getBoundingClientRect()
+    // const { left, top, width, height } = imageWrapper.getBoundingClientRect()
 
     let x = ((event.x - left - pointerWidth) / width) * 100
     let y = ((event.y - top - pointerWidth) / height) * 100
@@ -24,10 +28,6 @@
     }
 
     if (isPointer(event)) {
-
-      //imageWrapper.setPointerCapture(event.pointerId)
-      imageWrapper.classList.add('movestart')
-      imageWrapper.addEventListener('pointermove', movePointer)
       return
     }
 
@@ -35,19 +35,28 @@
 
     imageWrapper.insertAdjacentHTML(
       'beforeend',
-      `<span class="pointer" style="--left: ${x}%; --top: ${y}%"></span>`
+      `<span class="pointer" style="--left: ${x}%; --top: ${y}%"></span>`,
     )
 
   }
 
+  function preparePointer (event) {
+    if (event.button > 0) {
+      return
+    }
+
+    if (isPointer(event)) {
+      imageWrapper.addEventListener('pointermove', movePointer)
+    }
+  }
+
   function getSelectedPointer (event) {
     const pointers = imageWrapper.querySelectorAll('.pointer')
-    let currentPointer
 
     pointers.forEach((pointer) => {
-      currentPointer = pointer
+
       if (pointer.contains(event.target)) {
-        // currentPointer = pointer
+        currentPointer = pointer
         return pointer
       }
     })
@@ -61,29 +70,26 @@
   }
 
   function movePointer (event) {
-    const pointers = imageWrapper.querySelectorAll('.pointer')
 
-    if (isPointer(event)) {
+    event.preventDefault()
+    const { x, y } = calculatePointerPosition(event)
+    imageWrapper.classList.add('moving')
+    currentPointer.style.setProperty('--left', `${x}%`)
+    currentPointer.style.setProperty('--top', `${y}%`)
+  }
 
-      // imageWrapper.setPointerCapture(event.pointerId)
+  function stopMovingPointer (event) {
 
-      const currentPointer = getSelectedPointer(event)
-      const { x, y } = calculatePointerPosition(event)
-      imageWrapper.classList.add('moving')
-      currentPointer.style.setProperty('--left', `${x}%`)
-      currentPointer.style.setProperty('--top', `${y}%`)
-    }
-
+    //console.log('xx')
+    currentPointer = null
+    imageWrapper.classList.remove('moving')
+    imageWrapper.removeEventListener('pointermove', movePointer)
   }
 
   imageWrapper.addEventListener('pointerdown', setPointer)
 
-  imageWrapper.addEventListener('pointerup', (event) => {
-
-    imageWrapper.classList.remove('moving', 'movestart')
-    //imageWrapper.releasePointerCapture(event.pointerId)
-    imageWrapper.removeEventListener('pointermove', movePointer)
-  })
+  imageWrapper.addEventListener('pointerdown', preparePointer)
+  imageWrapper.addEventListener('pointerup', stopMovingPointer)
 
   imageWrapper.addEventListener('pointercancel', (event) => {
 

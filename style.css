@@ -24,12 +24,12 @@ img, video {
 	user-select: none;
 }
 
-#image-wrapper.movestart .pointer {
-	cursor: grab;
-}
-
 #image-wrapper.moving .pointer {
 	cursor: grabbing;
+}
+
+template{
+	display: none;
 }
 
 .pointer {
