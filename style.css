@@ -28,7 +28,7 @@ img, video {
 	cursor: grabbing;
 }
 
-template{
+template {
 	display: none;
 }
 
@@ -37,11 +37,12 @@ template{
 	cursor: pointer;
 	--left: 0%;
 	--top: 0%;
+	--size: 20px;
 	left: var(--left);
 	top: var(--top);
 	position: absolute;
-	width: 20px;
-	height: 20px;
+	width: var(--size);
+	aspect-ratio: 1 / 1;
 	background-color: #ff0000;
 	box-shadow: 0 0 0 2px #ff0000;
 	border-radius: 50%;
