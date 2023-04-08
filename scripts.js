@@ -35,7 +35,6 @@
         if (event.button > 0 || this.isPointer(event)) {
           return
         }
-       
 
         const { x, y } = this.calculatePointerPosition(event)
 
@@ -158,12 +157,37 @@
 
   CreateInstance('ImageMAP', Plugin)
 
-  ImageMAP('#image-wrapper')
 
+  // Default Init
+  // ImageMAP('#image-wrapper')
+
+  // Init then call custom method to get or set
   // ImageMAP('#image-wrapper', 'setPointerSize', 30)
 
+  // Init with custom option
+  // ImageMAP('#image-wrapper', { setPointerSize: 30 })
+
+  // Get method
   // console.log( ImageMAP('#image-wrapper', 'getPointerSize') )
 
+  // Destroy and remove
   // ImageMAP('#image-wrapper', 'destroy')
 
-})(window)
+})(window);
+
+(() => {
+  try {
+
+    const event = new Event("image_map_init");
+    document.addEventListener('image_map_init',  (event) => {
+      ImageMAP('#image-wrapper')
+    })
+
+     // Dispatch the event.
+    document.dispatchEvent(event);
+
+  } catch (err) {
+    // If failed (conflict?) log the error but don't stop other scripts breaking.
+    window.console.log(err)
+  }
+})()
