@@ -18,7 +18,6 @@
         this.settings = Object.assign({}, this.DEFAULTS, options)
         this.currentPointer = null
         this.name = name
-        this.rect = this.element.getBoundingClientRect()
 
         this.init()
       }
@@ -84,7 +83,12 @@
 
       calculatePointerPosition (event) {
 
-        const { left, top, width, height } = this.rect
+        const {
+          left,
+          top,
+          width,
+          height,
+        } = this.element.getBoundingClientRect()
 
         let x = ((event.x - left - (this.settings.pointerSize / 2)) / width) *
           100
@@ -157,7 +161,6 @@
 
   CreateInstance('ImageMAP', Plugin)
 
-
   // Default Init
   // ImageMAP('#image-wrapper')
 
@@ -178,13 +181,13 @@
 (() => {
   try {
 
-    const event = new Event("image_map_init");
-    document.addEventListener('image_map_init',  (event) => {
+    const event = new Event('image_map_init')
+    document.addEventListener('image_map_init', (event) => {
       ImageMAP('#image-wrapper')
     })
 
-     // Dispatch the event.
-    document.dispatchEvent(event);
+    // Dispatch the event.
+    document.dispatchEvent(event)
 
   } catch (err) {
     // If failed (conflict?) log the error but don't stop other scripts breaking.
