@@ -83,6 +83,8 @@
 
       calculatePointerPosition (event, element) {
 
+        // @TODO: Don't use event.target as element to calculate during moving, it will blink your pointer during move.
+
         const {
           left,
           top,
