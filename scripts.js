@@ -35,7 +35,7 @@
           return
         }
 
-        const { x, y } = this.calculatePointerPosition(event)
+        const { x, y } = this.calculatePointerPosition(event, this.element)
 
         const template = `<span class="pointer" style="--size:${this.settings.pointerSize}px; --left: ${x}%; --top: ${y}%"></span>`
 
@@ -57,7 +57,7 @@
 
         event.preventDefault()
 
-        const { x, y } = this.calculatePointerPosition(event)
+        const { x, y } = this.calculatePointerPosition(event, this.element)
 
         this.element.classList.add('moving')
         this.currentPointer.style.setProperty('--left', `${x}%`)
@@ -81,14 +81,14 @@
         }
       }
 
-      calculatePointerPosition (event) {
+      calculatePointerPosition (event, element) {
 
         const {
           left,
           top,
           width,
           height,
-        } = this.element.getBoundingClientRect()
+        } = element.getBoundingClientRect()
 
         let x = ((event.x - left - (this.settings.pointerSize / 2)) / width) *
           100
