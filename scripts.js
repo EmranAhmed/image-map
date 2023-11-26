@@ -170,7 +170,7 @@
   // ImageMAP('#image-wrapper', 'setPointerSize', 30)
 
   // Init with custom option
-  // ImageMAP('#image-wrapper', { setPointerSize: 30 })
+  // ImageMAP('#image-wrapper', { pointerSize: 30 })
 
   // Get method
   // console.log( ImageMAP('#image-wrapper', 'getPointerSize') )
@@ -183,12 +183,13 @@
 (() => {
   try {
 
-    const event = new Event('image_map_init')
+
     document.addEventListener('image_map_init', (event) => {
-      ImageMAP('#image-wrapper')
+      ImageMAP('.image-wrapper')
     })
 
     // Dispatch the event.
+    const event = new Event('image_map_init')
     document.dispatchEvent(event)
 
   } catch (err) {
